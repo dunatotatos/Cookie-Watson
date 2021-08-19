@@ -10,6 +10,9 @@ InitBot = function() {
             var autoclick = setInterval(function() {
                 Game.ClickCookie();
             }, 50);
+
+            // Notify that the mod is loaded
+            Game.Notify('Watson','The game is in auto-pilot, now.',[0, 21]);
         }
     }, 1000)
 }
