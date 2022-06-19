@@ -1,1 +1,1 @@
-Gmae.Load('https://gitlab.dunatotatos.com/dunatotatos/cookie-watson/-/raw/master/src/watson.js')
+Game.Load('https://gitlab.dunatotatos.com/dunatotatos/cookie-watson/-/raw/master/src/watson.js')
