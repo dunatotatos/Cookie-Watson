@@ -6,31 +6,23 @@ if (Game.version > lastCompatibleVersion) {
 }
 
 // Init script
+var Watson = {};
+
 Watson.loadInterval = setInterval(function () {
     if (Game && Game.ready) {
         clearInterval(Watson.loadInterval);
-        watsonInit();
+        Watson.init();
     }
 }, 1000);
 
-watsonInit = function() {
+Watson.init = function() {
+    Watson.autoClick();
     Game.Notify('Watson', 'The game is in auto-pilot now.', [0,21]);
 }
 
-// Obsolete
-InitBot = function() {
-    var checkReady = setInterval(function() {
-        if (typeof Game.ready !== 'undefined' && Game.ready) {
-            // Remove click sound
-            Game.playCookieClickSound=function(){return};
-
-            // Cookie autoclick
-            var autoclick = setInterval(function() {
-                Game.ClickCookie();
-            }, 50);
-
-            // Notify that the mod is loaded
-            Game.Notify('Watson','The game is in auto-pilot, now.',[0, 21]);
-        }
-    }, 1000)
+// Cookie auto clicker
+Watson.autoClick = function() {
+    setInterval(function() {
+        Game.ClickCookie();
+    }, 50);
 }
