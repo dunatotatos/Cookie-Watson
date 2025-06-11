@@ -17,6 +17,7 @@ Watson.loadInterval = setInterval(function () {
 
 Watson.init = function() {
     Watson.autoClick();
+    Watson.autoWrinklers();
     Game.Notify('Watson', 'The game is in auto-pilot now.', [0,21]);
 }
 
@@ -25,4 +26,28 @@ Watson.autoClick = function() {
     setInterval(function() {
         Game.ClickCookie();
     }, 50);
+}
+
+// Wrinklers auto popping
+Watson.autoWrinklers = function() {
+    setInterval(function() {
+        // Count existing wrinklers, and find the fattest
+        var currentWrinklers = 0;
+        var idFattest = 0;
+        var suckedByFattest = 0;
+
+        for (let i=0; i<Game.wrinklers.length; i++) {
+            if (Game.wrinklers[i].sucked != 0) {
+                currentWrinklers += 1;
+            }
+            if (Game.wrinklers[i].type == 0 && Game.wrinklers[i].sucked > suckedByFattest) {
+                idFattest = i;
+            }
+        }
+
+        // If too may wrinklers, pop the fattest.
+        if(currentWrinklers >= Game.getWrinklersMax() - 1) {
+            Game.wrinklers[idFattest].hp = 0;
+        }
+    }, 1000);
 }
