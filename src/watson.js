@@ -18,6 +18,7 @@ Watson.loadInterval = setInterval(function () {
 Watson.init = function() {
     Watson.autoClick();
     Watson.autoWrinklers();
+    Watson.loadAutoMarket();
     Game.Notify('Watson', 'The game is in auto-pilot now.', [0,21]);
 }
 
@@ -51,4 +52,47 @@ Watson.autoWrinklers = function() {
             Game.wrinklers[idFattest].hp = 0;
         }
     }, 1000);
+}
+
+// Auto market
+Watson.loadAutoMarket = function() {
+    autoMarketLoader = setInterval(function() {
+        if (Game.Objects.Bank.minigameLoaded) {
+            Watson.autoMarket();
+            clearInterval(autoMarketLoader);
+        }
+    }, 1000);
+}
+
+// Strategy is to buy while the prices rise, and sell when it does not rise anymore. All other modes
+// are ignored.
+Watson.autoMarket = function() {
+    // Modes:
+    // 0: Stable
+    // 1: Slow rise
+    // 2: Slow fall
+    // 3: Fast rise
+    // 4: Fast fall
+    // 5: Chaotic
+    var market = Game.Objects.Bank.minigame
+    setInterval(function() {
+        for (let i=0; i < market.goodsById.length; i++){
+            var good = market.goodsById[i]
+            if (good.active) {
+                var maxGoods = parseInt(good.stockMaxL.innerText.replace(/[^0-9]/g,""));
+                // Buy in fast or slow rise mode
+                if ([1,3].includes(good.mode)) {
+                    if (good.stock != maxGoods) {
+                        market.buyGood(i, maxGoods);
+                        console.log("Buy ", good.name);
+                    }
+                } else {
+                    if (good.stock != 0) {
+                        market.sellGood(i, maxGoods);
+                        console.log("Sell ", good.name);
+                    }
+                }
+            }
+        }
+    }, 60000);
 }
