@@ -42,6 +42,7 @@ Watson.autoWrinklers = function() {
             }
             if (Game.wrinklers[i].type == 0 && Game.wrinklers[i].sucked > suckedByFattest) {
                 idFattest = i;
+                suckedByFattest = Game.wrinklers[i].sucked
             }
         }
 
